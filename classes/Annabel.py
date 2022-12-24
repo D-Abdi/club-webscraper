@@ -3,28 +3,32 @@ from bs4 import BeautifulSoup
 
 
 class Annabel:
-    def __init__(self, title, date):
+    def __init__(self, title, date, img):
         self.title = title
         self.date = date
+        self.img = img
 
     def __str__(self):
-        return f"{self.title} {self.date}"
+        return f"{self.title} {self.date} {self.img}"
 
     def scrape():
         URL = "https://www.annabel.nu/maandagenda/"
         page = requests.get(URL)
         soup = BeautifulSoup(page.content, "html.parser")
 
-        siteInfo = soup.find_all("div", class_="small info")
+        siteInfo = soup.find_all("div", class_="column")
 
         dataList = []
 
         for info in siteInfo:
+            img_element = info.find("img")
+            img_src= str(img_element['src'])
             title_element = info.find("h1").text
             title_element = str(title_element)
             date_element = info.find("p").text
             date_element = str(date_element)
-            eventInfo = Annabel(title_element, date_element)
+            eventInfo = Annabel(title_element, date_element, img_src)
+            print(img_element['src'], "IMAGESS")
             dataList.append(eventInfo)
 
         return dataList

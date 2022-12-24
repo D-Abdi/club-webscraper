@@ -2,10 +2,11 @@ import requests
 from bs4 import BeautifulSoup
 
 class Toffler:
-    def __init__(self, title, artist, date):
+    def __init__(self, title, artist, date, img):
         self.title = title
         self.artist = artist
         self.date = date
+        self.img = img
 
     def __str__(self) -> str:
         return f"{self.title} {self.artist} {self.date}"
@@ -44,8 +45,10 @@ class Toffler:
                 title_element = title_h2
 
             date_string = day_element + " " + day_number_element + " " + month_element
+
+            img_src = "https://i.ibb.co/KLF6rzK/toffler.png"
         
-            eventInfo = Toffler(title_element, artist_element, date_string)
+            eventInfo = Toffler(title_element, artist_element, date_string, img_src)
             dataList.append(eventInfo)
         
         return dataList

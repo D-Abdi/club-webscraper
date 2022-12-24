@@ -3,13 +3,14 @@ from bs4 import BeautifulSoup
 
 
 class Maassilo:
-    def __init__(self, title, location, date):
+    def __init__(self, title, location, date, img):
         self.title = title
         self.location = location
         self.date = date
+        self.img = img
 
     def scrape():
-        URL = "https://www.maassilo.com/now-and-wow-club"
+        URL = "https://www.maassilo.com/nightlife"
         page = requests.get(URL)
         soup = BeautifulSoup(page.content, "html.parser")
 
@@ -27,7 +28,12 @@ class Maassilo:
             )
             location_element = p_elements[3].text
 
-            eventInfo = Maassilo(title_element, location_element, date_element)
+            if (location_element == "Locatie: Maassilo"):
+                img_src="https://i.ibb.co/2y5xTbF/maassilo.jpg"
+            else:
+                img_src="https://i.ibb.co/jWKhw47/nowandwow.png"
+
+            eventInfo = Maassilo(title_element, location_element, date_element, img_src)
             dataList.append(eventInfo)
 
         return dataList
