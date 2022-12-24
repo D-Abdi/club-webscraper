@@ -10,7 +10,7 @@ class Toffler:
     def __str__(self) -> str:
         return f"{self.title} {self.artist} {self.date}"
 
-    def scrapeToffler():
+    def scrape():
         URL = "https://www.toffler.nl/"
         page = requests.get(URL)
         soup = BeautifulSoup(page.content, "html.parser")
@@ -37,7 +37,7 @@ class Toffler:
 
             artist_element = info.find("strong", class_="event_excerpt").text
 
-            title_element = "";
+            title_element = ""
             if (title_h1 != "None"): 
                 title_element = title_h1
             elif (title_h2 != "None"): 
@@ -49,3 +49,12 @@ class Toffler:
             dataList.append(eventInfo)
         
         return dataList
+    
+    def clubInfo():
+        return {
+            "name": "Toffler",
+            "location": "Rotterdam, Netherlands",
+            "description": "Sinds de opening in november 2011 staat TOFFLER bekend om zijn verplaatsbare DJ-booth met volledig geïntegreerd geluids- en lichtsysteem, die 's nachts heen en weer kan bewegen dankzij een speciaal ontworpen hydraulisch systeem. Dit resulteert in een ruimte die zich onder alle omstandigheden kan aanpassen aan de menigte. De club is een voormalige voetgangerstunnel in het centrum van Rotterdam en staat bekend om zijn karakteristieke LED-verlichting. DJ's staan ​​vaak bekend om het draaien van uitgebreide sets bij TOFFLER.",
+            "address": "Weena-Zuid 33, 3012 NH",
+            "events": Toffler.scrape()
+        }

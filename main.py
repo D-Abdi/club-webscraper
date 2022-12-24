@@ -1,20 +1,48 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+import requests
+from bs4 import BeautifulSoup
+
 from classes.Annabel import Annabel
 from classes.Toffler import Toffler
+from classes.Maassilo import Maassilo
 
 app = FastAPI()
+
+origins = [
+    "http://localhost",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:5173/clubs",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def root():
     return { "message": "Hello world"}
 
-@app.get("/annabel")
+@app.get("/clubs")
+async def read_clubs():
+    return { 
+        "Annabel": Annabel.clubInfo(),
+        "Toffler": Toffler.clubInfo(),
+        "Maassilo": Maassilo.clubInfo()
+    }
+
+@app.get("/clubs/annabel")
 async def read_annabel():
-    annabel = Annabel.scrapeAnnabel()
-    return annabel
+    return { "annabel": Annabel.scrape() }
 
+@app.get("/clubs/toffler")
+async def read_toffler():
+    return { "toffler": Toffler.scrape() }
 
-# for event in toffler:
-#     print(event.title, "Title")
-#     print(event.artist, "Artist")
-#     print(event.date, "Date")
+@app.get("/clubs/maassilo")
+async def read_maassilo():
+    return { "maassilo": Maassilo.scrape() }
