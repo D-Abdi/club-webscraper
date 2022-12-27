@@ -52,5 +52,8 @@ async def read_toffler():
 async def read_maassilo():
     return Maassilo.scrape()
 
+@app.get("/clubs/maassilo/{url}")
+async def read_maassilo_event(url):
+    return Maassilo.eventInfo(url)
 
-Maassilo.scrapeEvent("https://www.maassilo.com/agenda/tiktak-new-years-eve")
+Maassilo.eventInfo("agenda%2Ftiktak-new-years-eve")

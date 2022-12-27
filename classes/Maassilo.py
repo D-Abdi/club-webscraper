@@ -41,26 +41,42 @@ class Maassilo:
         return dataList
 
     def scrapeEvent(URL):
-        page = requests.get(URL)
+        URL = URL.replace("%2F", "/")
+        url = "https://www.maassilo.com/" + URL
+        print(url, "URLLL")
+        page = requests.get(url)
         soup = BeautifulSoup(page.content, "html.parser")
 
-        print(soup.prettify(), "PRETTYY")
+        event_info = soup.find("div", class_="content")
+        
+        div_elements = event_info.find_all(
+                "div", string=lambda text: "Locatie:"
+            )
 
-    def clubInfo(self):
+        p_elements = event_info.find_all(
+                "p", string=lambda text: "Locatie:"
+            )
+        
+        price_element = p_elements[1].text
+
+        description_element = div_elements[2].text
+
+        return {
+            "price": price_element.strip(),
+            "description": description_element.strip()
+        }
+
+
+    def clubInfo():
         return {
             "name": "Maassilo / Now&Wow",
             "location": "Rotterdam, Netherlands",
             "description": "Maassilo, een 100 jaar oude graanssilo. Maassilo bestaat uit een complex van totaal 3 silo's die in een tijdsbestek van 50 jaar aan de Maashaven Zuidzijde zijn gebouwd. Een unieke eventlocatie aan de zuidzijde van Rotterdam.",
             "address": "Maashaven Zuidzijde 1-2, 3081 AE",
-            "events": self.scrape()
+            "events": Maassilo.scrape()
         }
 
-    def eventInfo(self, URL):
+    def eventInfo(URL):
         return {
-           "title": self.title,
-           "location": self.location,
-           "date": self.date,
-           "img": self.img,
-           "link": self.link,
-           "eventInfo": self.scrapeEvent(URL)
+           "eventInfo": Maassilo.scrapeEvent(URL)
         }
