@@ -3,13 +3,14 @@ from bs4 import BeautifulSoup
 
 
 class Annabel:
-    def __init__(self, title, date, img):
+    def __init__(self, title, date, img, link):
         self.title = title
         self.date = date
         self.img = img
+        self.link = link
 
     def __str__(self):
-        return f"{self.title} {self.date} {self.img}"
+        return f"{self.title} {self.date} {self.img} {self.link}"
 
     def scrape():
         URL = "https://www.annabel.nu/maandagenda/"
@@ -21,14 +22,14 @@ class Annabel:
         dataList = []
 
         for info in siteInfo:
+            link_element = info.find("a")["href"]
             img_element = info.find("img")
             img_src= str(img_element['src'])
             title_element = info.find("h1").text
             title_element = str(title_element)
             date_element = info.find("p").text
             date_element = str(date_element)
-            eventInfo = Annabel(title_element, date_element, img_src)
-            print(img_element['src'], "IMAGESS")
+            eventInfo = Annabel(title_element, date_element, img_src, link_element)
             dataList.append(eventInfo)
 
         return dataList

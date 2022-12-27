@@ -23,26 +23,34 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 async def root():
-    return { "message": "Hello world"}
+    return {"message": "Hello world"}
+
 
 @app.get("/clubs")
 async def read_clubs():
-    return { 
-        "Annabel": Annabel.clubInfo(),
-        "Toffler": Toffler.clubInfo(),
-        "Maassilo": Maassilo.clubInfo()
-    }
+    return [
+        Annabel.clubInfo(),
+        Toffler.clubInfo(),
+        Maassilo.clubInfo()
+    ]
+
 
 @app.get("/clubs/annabel")
 async def read_annabel():
-    return { "annabel": Annabel.scrape() }
+    return Annabel.scrape()
+
 
 @app.get("/clubs/toffler")
 async def read_toffler():
-    return { "toffler": Toffler.scrape() }
+    return Toffler.scrape()
+
 
 @app.get("/clubs/maassilo")
 async def read_maassilo():
-    return { "maassilo": Maassilo.scrape() }
+    return Maassilo.scrape()
+
+
+Maassilo.scrapeEvent("https://www.maassilo.com/agenda/tiktak-new-years-eve")

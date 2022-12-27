@@ -2,14 +2,15 @@ import requests
 from bs4 import BeautifulSoup
 
 class Toffler:
-    def __init__(self, title, artist, date, img):
+    def __init__(self, title, artist, date, img, link):
         self.title = title
         self.artist = artist
         self.date = date
         self.img = img
+        self.link = link
 
     def __str__(self) -> str:
-        return f"{self.title} {self.artist} {self.date}"
+        return f"{self.title} {self.artist} {self.date} {self.link}"
 
     def scrape():
         URL = "https://www.toffler.nl/"
@@ -20,7 +21,14 @@ class Toffler:
 
         dataList = []
 
-        for info in siteInfo:
+        for info in siteInfo:        
+            a_element = info.find("a", class_="link--cta")
+            
+            if (a_element != None and a_element["href"] != None):
+                link_element = a_element["href"]
+            else:
+                link_element = None
+
             date_element = info.find("span", class_="event_date")
             # print(date_element, "Date")
             day_element = date_element.find("i").text
@@ -48,7 +56,7 @@ class Toffler:
 
             img_src = "https://i.ibb.co/KLF6rzK/toffler.png"
         
-            eventInfo = Toffler(title_element, artist_element, date_string, img_src)
+            eventInfo = Toffler(title_element, artist_element, date_string, img_src, link_element)
             dataList.append(eventInfo)
         
         return dataList
