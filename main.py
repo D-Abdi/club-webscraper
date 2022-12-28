@@ -6,18 +6,21 @@ from bs4 import BeautifulSoup
 from classes.Annabel import Annabel
 from classes.Toffler import Toffler
 from classes.Maassilo import Maassilo
+from classes.Bird import Bird
 
 app = FastAPI()
 
 origins = [
     "http://localhost",
-    "http://127.0.0.1:5173",
+    "http://127.0.0.1:5173/",
+    "http://127.0.0.1:4000",
     "http://127.0.0.1:5173/clubs",
+    "http://127.0.0.1:4000/clubs",
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -34,7 +37,8 @@ async def read_clubs():
     return [
         Annabel.clubInfo(),
         Toffler.clubInfo(),
-        Maassilo.clubInfo()
+        Maassilo.clubInfo(),
+        Bird.clubInfo()
     ]
 
 
@@ -52,8 +56,12 @@ async def read_toffler():
 async def read_maassilo():
     return Maassilo.scrape()
 
-@app.get("/clubs/maassilo/{url}")
+@app.get("/clubs/maassilo{url}")
 async def read_maassilo_event(url):
     return Maassilo.eventInfo(url)
 
-Maassilo.eventInfo("agenda%2Ftiktak-new-years-eve")
+@app.get("/clubs/bird")
+async def read_bird():
+    return Bird.scrape()
+
+Bird.scrape()
